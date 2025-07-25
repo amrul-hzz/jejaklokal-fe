@@ -155,19 +155,19 @@ export default function EmptyNotificationPage() {
         }
       );
       const data = await res.json();
-      console.log("Notif data:", data);
+      //   console.log("Notif data:", data);
 
       if (data) {
         router.push("/notifications/list");
       }
     } catch (err) {
-      console.error("Gagal fetch notifikasi:", err);
+      console.error("failed fetch:", err);
     }
   };
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setError("Geolocation tidak didukung di browser ini.");
+      setError("Geolocation not supported");
       return;
     }
 
@@ -238,22 +238,32 @@ export default function EmptyNotificationPage() {
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-black">
       <div className="w-full max-w-sm h-[95vh] bg-sand flex flex-col rounded-xl shadow-xl">
-        <div className="px-6 pt-12 pb-6 flex items-center gap-3">
-          <h1 className="text-2xl font-semibold text-coffee">Notifikasi</h1>
+        <div className="flex flex-row justify-between relative px-6 pt-6 pb-8">
+          <div className="absolute top-6 right-6 flex flex-col items-center">
+            <Image
+              src="/assets/logo.svg"
+              alt="Logo Jejak Lokal"
+              width={32}
+              height={32}
+              className="mb-1 w-14"
+            />
+          </div>
+          <h1 className="text-2xl font-semibold mt-4 text-coffee">
+            Notifikasi
+          </h1>
         </div>
 
         <div className="flex-1 flex flex-col items-center justify-center px-6 pb-20 text-center">
-          <div className="w-[400px] h-[400px] relative flex items-center justify-center">
-            <div className="absolute w-[300px] h-[300px] bg-white rounded-full z-0" />
+          <div className="w-[270px] h-[270px] relative flex items-center justify-center">
             <Image
-              src="/assets/empty-notif.png"
+              src="/assets/image.svg"
               alt="Ilustrasi notifikasi kosong"
               fill
               className="object-contain z-10"
             />
           </div>
 
-          <div className="max-w-sm text-stone">
+          <div className="max-w-sm text-stone mt-8">
             <h2 className="text-xl font-semibold mb-4">
               Belum ada cerita nih!
             </h2>

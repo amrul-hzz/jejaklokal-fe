@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { ArrowLeft } from "lucide-react";
@@ -42,7 +44,7 @@ export default function JejakCeritaPage() {
 
   if (!story) {
     return (
-      <div className="w-full h-screen flex items-center justify-center text-[#675549]">
+      <div className="w-full h-screen flex items-center justify-center text-coffee">
         Memuat cerita...
       </div>
     );
@@ -51,7 +53,6 @@ export default function JejakCeritaPage() {
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-black">
       <div className="w-full max-w-sm h-[95vh] bg-sand flex flex-col rounded-xl shadow-xl">
-        {/* Header */}
         <div className="px-6 pt-6 pb-4 flex items-center justify-between">
           <ArrowLeft
             className="w-6 h-6 text-[#675549] cursor-pointer"
@@ -67,49 +68,51 @@ export default function JejakCeritaPage() {
           />
         </div>
 
-        {/* Judul */}
         <div className="px-6 pb-4">
-          <h1 className="text-2xl font-bold text-[#675549]">Jejak Cerita</h1>
+          <div className="flex items-center gap-3 relative w-fit">
+            <h1 className="text-2xl font-bold text-coffee">Adat Lokal</h1>
+
+            <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+              <span className="text-xs text-white font-semibold leading-none">
+                !
+              </span>
+            </div>
+          </div>
         </div>
 
-        {/* Lokasi */}
-        <div className="px-6 pb-4 flex items-center gap-2">
+        <div className="px-6 pb-6 flex items-center gap-2">
           <CiLocationOn className="w-5 h-5 text-red-500 fill-red-500" />
-          <span className="text-base font-medium text-[#675549]">
+          <span className="text-base font-medium text-coffee">
             {story.location_name}
           </span>
         </div>
 
-        {/* Konten */}
         <div className="flex-1 px-6 pb-6">
           <div className="bg-white rounded-3xl p-6 h-[65vh] flex flex-col">
-            <h2 className="text-xl font-bold text-[#675549] leading-tight mb-6 text-center">
+            <h2 className="text-xl font-bold text-coffee leading-tight mb-6 text-center">
               {story.hook}
             </h2>
 
-            {/* Tag */}
-            <div className="flex flex-wrap gap-2 justify-center mb-6">
-              {["Folklore", "History", "Festivals & Rituals"].map(
-                (tag, index) => (
-                  <span
-                    key={index}
-                    className="px-4 py-1 rounded-full border border-[#C4A574] text-[#675549] text-xs"
-                  >
-                    {tag}
-                  </span>
-                )
-              )}
-            </div>
-
-            {/* Deskripsi Placeholder */}
             <div className="overflow-y-auto pr-2 flex-1">
               <div className="space-y-4">
-                <p className="text-sm text-[#4A4A4A] leading-relaxed">
-                  Cerita menarik seputar <strong>{story.location_name}</strong>{" "}
-                  akan ditampilkan di sini berdasarkan data dari notifikasi.
-                  Silakan integrasikan deskripsi lengkap berdasarkan struktur
-                  backend jika tersedia.
+                <p className="text-sm text-[#4A4A4A] leading-relaxed text-justify">
+                  Beberapa tempat punya aturan tak tertulis yang penting untuk
+                  dihormati. Sebelum menjelajah lebih jauh, yuk kenali dulu{" "}
+                  <strong>adat dan kebiasaan setempat</strong> berikut ini:
                 </p>
+
+                <div className="space-y-4 mt-6">
+                  {story.customs_list.map((custom, index) => (
+                    <div key={index} className="flex gap-3">
+                      <span className="text-sm font-semibold text-[#4A4A4A] min-w-[20px]">
+                        {index + 1}.
+                      </span>
+                      <p className="text-sm text-[#4A4A4A] leading-relaxed text-justify">
+                        {custom}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
