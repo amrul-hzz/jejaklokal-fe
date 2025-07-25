@@ -198,19 +198,21 @@ export default function NotificationPage() {
               className="mb-1 w-14"
             />
           </div>
-          <h1 className="text-2xl font-semibold mt-4 text-coffee">
-            Notifikasi
-          </h1>
-        </div>
 
-        <div className="px-6 pb-6 flex items-center relative w-fit">
-          {notifications.filter((n) => !n.is_read).length > 0 && (
-            <div className="absolute -top-2 -right-6 w-5 h-5 bg-golden rounded-full flex items-center justify-center">
-              <span className="text-[14px] text-white font-semibold">
-                {notifications.filter((n) => !n.is_read).length}
-              </span>
+          <div className="flex items-center gap-3 relative w-fit">
+            <h1 className="text-2xl font-semibold mt-4 text-coffee">
+              Notifikasi
+            </h1>
+            <div className="px-6 pb-6 flex items-center relative w-fit">
+              {notifications.filter((n) => !n.is_read).length > 0 && (
+                <div className="absolute -top-1 right-9 w-5 h-5 bg-golden rounded-full flex items-center justify-center">
+                  <span className="text-[12px] text-white font-semibold leading-none">
+                    {notifications.filter((n) => !n.is_read).length}
+                  </span>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
 
         <div className="flex-1 overflow-y-auto pl-8 pr-0 pb-20 space-y-0">
