@@ -1,105 +1,95 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
-export default function LocationTracker() {
-  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
-    null
-  );
+export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const router = useRouter();
 
-  useEffect(() => {
-    let entryLocation: { lat: number; lng: number } | null = null;
-    let timer: ReturnType<typeof setTimeout> | null = null;
+  const handleLogin = () => {
+    if (!email) return;
 
-    const getDistance = (
-      lat1: number,
-      lng1: number,
-      lat2: number,
-      lng2: number
-    ) => {
-      const toRad = (value: number) => (value * Math.PI) / 180;
-      const R = 6371e3;
-      const φ1 = toRad(lat1);
-      const φ2 = toRad(lat2);
-      const Δφ = toRad(lat2 - lat1);
-      const Δλ = toRad(lng2 - lng1);
+    // Simpan ke localStorage supaya bisa diakses di halaman lain
+    localStorage.setItem("userEmail", email);
 
-      const a =
-        Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-        Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-      return R * c;
-    };
-
-    const startTimer = (location: { lat: number; lng: number }) => {
-      timer = setTimeout(() => {
-        fetch("/api/generate-story", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(location),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            alert(data.story);
-          })
-          .catch(console.error);
-      }, 3 * 60 * 1000);
-    };
-
-    const watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-
-        console.log("Current Location:", latitude, longitude);
-        setLocation({ lat: latitude, lng: longitude });
-
-        if (!entryLocation) {
-          entryLocation = { lat: latitude, lng: longitude };
-          startTimer(entryLocation);
-        } else {
-          const dist = getDistance(
-            entryLocation.lat,
-            entryLocation.lng,
-            latitude,
-            longitude
-          );
-          if (dist > 100) {
-            if (timer) clearTimeout(timer);
-            entryLocation = { lat: latitude, lng: longitude };
-            startTimer(entryLocation);
-          }
-        }
-      },
-      (err) => {
-        console.error("GPS error:", err);
-      },
-      {
-        enableHighAccuracy: true,
-        maximumAge: 5000,
-        timeout: 10000,
-      }
-    );
-
-    return () => {
-      if (timer) clearTimeout(timer);
-      navigator.geolocation.clearWatch(watchId);
-    };
-  }, []);
+    // Arahkan ke halaman notifikasi
+    router.push("/notifications");
+  };
 
   return (
-    <main className="p-6">
-      <h1 className="text-xl font-bold">🗺️ Location Tracker Active</h1>
-      <p className="text-gray-600">
-        Stay in one place for 3 minutes to hear a story.
-      </p>
-
-      {location && (
-        <div className="mt-4">
-          <p>📍 Latitude: {location.lat}</p>
-          <p>📍 Longitude: {location.lng}</p>
+    <div className="w-full min-h-screen flex items-center justify-center bg-black">
+      <div className="w-full max-w-sm h-[95vh] bg-sand flex flex-col rounded-xl shadow-xl">
+        {/* Header with Logo */}
+        <div className="relative px-6 pt-6 pb-8">
+          <div className="absolute top-6 right-6 flex flex-col items-center">
+            <Image
+              src="/assets/logo.svg"
+              alt="Logo Jejak Lokal"
+              width={32}
+              height={32}
+              className="mb-1 w-14"
+            />
+          </div>
         </div>
-      )}
-    </main>
+
+        {/* Main Content */}
+        <div className="flex-1 flex flex-row items-center justify-between px-6">
+          {/* Illustration */}
+
+          {/* Main Text */}
+          <div className="mr-5 -mt-80 text-left w-1/4">
+            <h1 className="text-3xl font-bold text-[#6B5B47] leading-tight">
+              Jelajahi.
+            </h1>
+            <h1 className="text-3xl font-bold text-[#6B5B47] leading-tight">
+              Dengarkan.
+            </h1>
+            <h1 className="text-3xl font-bold text-[#6B5B47] leading-tight">
+              Rasakan.
+            </h1>
+          </div>
+          <div className="pl-24 absolute bottom-60 z-10">
+            <Image
+              src="/assets/motorcycles.svg"
+              alt="Hiker illustration"
+              width={280}
+              height={320}
+              className="w-[220px] h-200px] object-contain"
+            />
+          </div>
+        </div>
+
+        {/* Bottom Section */}
+        <div className="bg-white rounded-t-3xl rounded-b-xl px-6 py-14 mt-auto">
+          {/* Welcome Text */}
+          <p className="text-md text-coffee mb-4 font-semibold text-center">
+            Selamat datang! Yuk, masukan email mu!
+          </p>
+
+          {/* Email Input */}
+          <div className="mb-6">
+            <input
+              type="email"
+              placeholder="Ketik email mu disini"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-3 rounded-xl border-2 border-[#C4A574] bg-transparent text-[#6B5B47] placeholder-[#A0A0A0] focus:outline-none focus:border-[#6B5B47] text-sm"
+            />
+          </div>
+
+          {/* Login Button */}
+          <div className="flex justify-center">
+            <button
+              onClick={handleLogin}
+              className="w-1/3 bg-[#6B5B47] text-white py-3 rounded-xl font-semibold text-base hover:bg-[#5A4A3D] transition-colors"
+            >
+              Login
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
